@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("medicos")
+@RestController             //Indica que a classe é um controller REST, com os métodos retornando dados (JSON por padrão).
+@RequestMapping("medicos")  //Todos os endpoints dessa classe começarão com /medicos.
 public class MedicoController {
 
-    @Autowired
+    @Autowired //Injeta automaticamente a dependência de MedicoRepository, que é um repositório Spring Data JPA para acessar o banco de dados.
     private MedicoRepository repository;
 
-    @PostMapping
-    @Transactional
-    public void cadastrar(@RequestBody @Valid DadosCadastroMedico dados){
+    @PostMapping    //Esse metodo será acionado por requisições HTTP POST em /medicos.
+    @Transactional  //Garante que a operação seja executada dentro de uma transação do banco.
+    public void cadastrar(@RequestBody  // Diz que os dados virão no corpo da requisição (JSON).
+                          @Valid        //Ativa a validação automática dos dados com base nas anotações em DadosCadastroMedico.
+                          DadosCadastroMedico dados){
         repository.save(new Medico(dados));
     }
-
-
 
 }
