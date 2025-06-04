@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController             //Indica que a classe é um controller REST, com os métodos retornando dados (JSON por padrão).
 @RequestMapping("medicos")  //Todos os endpoints dessa classe começarão com /medicos.
@@ -19,17 +21,24 @@ public class MedicoController {
     //Serve para salvar os dados do médico
     @PostMapping    //Esse metodo será acionado por requisições HTTP POST em /medicos.
     @Transactional  //Garante que a operação seja executada dentro de uma transação do banco.
-    public void cadastrar(@RequestBody              // Diz que os dados virão no corpo da requisição (JSON).
-                          @Valid                    //Ativa a validação automática dos dados com base nas anotações em DadosCadastroMedico.
-                          DadosCadastroMedico dados //DTO via JavaRecord para representar os dados que estão chegando na API
-    ){
-        repository.save(new Medico(dados));
+    public ResponseEntity cadastrar(@RequestBody            // Diz que os dados virão no corpo da requisição (JSON).
+                          @Valid                            //Ativa a validação automática dos dados com base nas anotações em DadosCadastroMedico.
+                          DadosCadastroMedico dados,        //DTO via JavaRecord para representar os dados que estão chegando na API
+                          UriComponentsBuilder uriBuilder   // É uma classe para atualizar a URL quando realizar deploy ou alterar o mesmo
+                          ){
+        var medico = new Medico(dados);
+        repository.save(medico);
+
+        var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));
     }
 
     //Serve para listar os dados de médicos ou médico
     @GetMapping
-    public Page<DadosListagemMedico> listarMedicos(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
-        return repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
+    //ResponseEntity serve para colocar o status dos dados
+    public ResponseEntity<Page<DadosListagemMedico>> listarMedicos(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
+        var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
+        return ResponseEntity.ok(page);
     }
 
     /*
@@ -50,10 +59,12 @@ public class MedicoController {
     //Serve para alterar dados específicos de um médico
     @PutMapping
     @Transactional
-    public void atualizarMedico(@RequestBody @Valid DadosAtualizacaoMedico dados) {
+    public ResponseEntity atualizarMedico(@RequestBody @Valid DadosAtualizacaoMedico dados) {
+        //Atualiza e devolve os dados
         var medico = repository.getReferenceById(dados.id());
         medico.atualizarInformacoes(dados);
 
+        return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
     }
 
     /*
@@ -73,12 +84,13 @@ public class MedicoController {
     //Mapear o id inserido na URL
     @DeleteMapping("/{id}")
     @Transactional
-    public void excluir(
+    public ResponseEntity excluir(
             //Serve para informar o id na URL
             @PathVariable Long id) {
         var medico = repository.getReferenceById(id);
         medico.excluir();
 
+        return ResponseEntity.noContent().build();
     }
 
 }
