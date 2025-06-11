@@ -1,7 +1,7 @@
 package med.voll.api.controller;
 
 import jakarta.validation.Valid;
-import med.voll.api.medico.*;
+import med.voll.api.domain.medico.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,10 +26,14 @@ public class MedicoController {
                           DadosCadastroMedico dados,        //DTO via JavaRecord para representar os dados que estão chegando na API
                           UriComponentsBuilder uriBuilder   // É uma classe para atualizar a URL quando realizar deploy ou alterar o mesmo
                           ){
+        //Realiza o novo cadastro de médico
         var medico = new Medico(dados);
         repository.save(medico);
 
+        //Será o caminho de sempre, mesmo trocando a URL do site
         var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
+        //Irá receber o HTTP de criação (201)
+        //Quando cadastrado o médico, será já chamado para a visualização do mesmo
         return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));
     }
 
@@ -64,6 +68,7 @@ public class MedicoController {
         var medico = repository.getReferenceById(dados.id());
         medico.atualizarInformacoes(dados);
 
+        //Irá receber o HTTP de ok (200)
         return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
     }
 
@@ -90,6 +95,7 @@ public class MedicoController {
         var medico = repository.getReferenceById(id);
         medico.excluir();
 
+        //Irá receber o HTTP de noContent (204)
         return ResponseEntity.noContent().build();
     }
 
