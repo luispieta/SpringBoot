@@ -9,17 +9,17 @@ import med.voll.api.domain.endereco.DadosEndereco;
 
 //RECORD para o cadastro
 public record DadosCadastroMedico(
-        @NotBlank //Obriga inserir caracters de String, assim não podendo ser vazio
+        @NotBlank(message = "Campo nome é obrigatório") //Obriga inserir caracters de String, assim não podendo ser vazio
         String nome,
-        @NotBlank
-        @Email //Ira conter o formato de email com @, .com e outros
+        @NotBlank(message = "Campo email é obrigatório")
+        @Email(message = "Formato do email é inválido")//Ira conter o formato de email com @, .com e outros
         String email,
-        @NotBlank
+        @NotBlank(message = "Campo telefone é obrigatório")
         String telefone,
-        @NotBlank
-        @Pattern(regexp = "\\d{4,6}") //Será obrigatório de 4 a 6 digitos
+        @NotBlank(message = "Campo CRM é obrigatório")
+        @Pattern(regexp = "\\d{4,6}", message = "Quantidade incorreto do CRM") //Será obrigatório de 4 a 6 digitos
         String crm,
-        @NotNull //O campo será obrigatório
+        @NotNull(message = "Campo especialidade é obrigatório")//O campo será obrigatório
         Especialidade especialidade,
         @NotNull
         @Valid // Ira validar também o outro objeto
