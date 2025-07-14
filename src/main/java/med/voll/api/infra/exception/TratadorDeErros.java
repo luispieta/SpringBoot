@@ -21,7 +21,6 @@ public class TratadorDeErros {
     //Toda vez que um controller e dar erro, irá ser chamado esse metodo
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity tratarErro400(MethodArgumentNotValidException ex) {
-
         //Irá listar a mensagem de erros
         var erros = ex.getFieldErrors();
         //Irá retornar o HTTP Bad Request (400)
