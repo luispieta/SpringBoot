@@ -1,7 +1,7 @@
 package med.voll.api.controller;
 
 import jakarta.validation.Valid;
-import med.voll.api.domain.usuario.DadosAutenticacao;
+import med.voll.api.domain.usuario.DTOAutenticacao;
 import med.voll.api.domain.usuario.Usuario;
 import med.voll.api.infra.security.DadosTokenJWT;
 import med.voll.api.infra.security.TokenService;
@@ -26,7 +26,7 @@ public class AutenticacaoController {
 
     //Será o metodo que irá realizar o login
     @PostMapping
-    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
+    public ResponseEntity efetuarLogin(@RequestBody @Valid DTOAutenticacao dados) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
         //Não irá jogar o token no JSON, irá encapsular o token com descrição
         var authentication = manager.authenticate(authenticationToken);
