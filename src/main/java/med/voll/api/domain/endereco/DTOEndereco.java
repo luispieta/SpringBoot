@@ -3,7 +3,7 @@ package med.voll.api.domain.endereco;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record DadosEndereco(
+public record DTOEndereco(
         @NotBlank(message = "Campo logradouro é obrigatório")
         String logradouro,
         @NotBlank(message = "Campo bairro é obrigatório")

@@ -23,7 +23,7 @@ public class Paciente {
     private Endereco endereco;
     private Boolean ativo;
 
-    public Paciente(DadosCadastroPaciente dadosPaciente) {
+    public Paciente(DTOCadastroPaciente dadosPaciente) {
         this.ativo = true;
         this.nome = dadosPaciente.nome();
         this.email = dadosPaciente.email();
@@ -33,7 +33,7 @@ public class Paciente {
 
     }
 
-    public void atualizarInformacoes(DadosAtualizacaoPaciente dados) {
+    public void atualizarInformacoes(DTOAtualizacaoPaciente dados) {
         if(dados.nome() != null){
             this.nome = dados.nome();
         }

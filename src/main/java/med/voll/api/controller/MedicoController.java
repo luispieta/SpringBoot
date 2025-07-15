@@ -23,8 +23,8 @@ public class MedicoController {
     @Transactional  //Garante que a operação seja executada dentro de uma transação do banco.
     public ResponseEntity cadastrar(@RequestBody            // Diz que os dados virão no corpo da requisição (JSON).
                           @Valid                            //Ativa a validação automática dos dados com base nas anotações em DadosCadastroMedico.
-                          DadosCadastroMedico dados,        //DTO via JavaRecord para representar os dados que estão chegando na API
-                          UriComponentsBuilder uriBuilder   // É uma classe para atualizar a URL quando realizar deploy ou alterar o mesmo
+                                        DTOCadastroMedico dados,        //DTO via JavaRecord para representar os dados que estão chegando na API
+                                    UriComponentsBuilder uriBuilder   // É uma classe para atualizar a URL quando realizar deploy ou alterar o mesmo
                           ){
         //Realiza o novo cadastro de médico
         var medico = new Medico(dados);
@@ -34,14 +34,14 @@ public class MedicoController {
         var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
         //Irá receber o HTTP de criação (201)
         //Quando cadastrado o médico, será já chamado para a visualização do mesmo
-        return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));
+        return ResponseEntity.created(uri).body(new DTODetalhamentoMedico(medico));
     }
 
     //Serve para listar os dados de médicos ou médico
     @GetMapping
     //ResponseEntity serve para colocar o status dos dados
-    public ResponseEntity<Page<DadosListagemMedico>> listarMedicos(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
-        var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
+    public ResponseEntity<Page<DTOListagemMedico>> listarMedicos(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
+        var page = repository.findAllByAtivoTrue(paginacao).map(DTOListagemMedico::new);
         return ResponseEntity.ok(page);
     }
 
@@ -63,13 +63,15 @@ public class MedicoController {
     //Serve para alterar dados específicos de um médico
     @PutMapping
     @Transactional
-    public ResponseEntity atualizarMedico(@RequestBody @Valid DadosAtualizacaoMedico dados) {
+    //Utilizado para determinar que só usuários ADMIN podem atualizar o médico
+    //@Secured("ROLE_ADMIN")
+    public ResponseEntity atualizarMedico(@RequestBody @Valid DTOAtualizacaoMedico dados) {
         //Atualiza e devolve os dados
         var medico = repository.getReferenceById(dados.id());
         medico.atualizarInformacoes(dados);
 
         //Irá receber o HTTP de ok (200)
-        return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
+        return ResponseEntity.ok(new DTODetalhamentoMedico(medico));
     }
 
     /*
@@ -101,11 +103,13 @@ public class MedicoController {
 
     //Serve para detalhar o cadastro de um médico
     @GetMapping("/{id}")
+    //Utilizado para determinar que só usuários ADMIN podem detalhar o médico
+    //@Secured("ROLE_ADMIN")
     public ResponseEntity detalhar(
                                 //Serve para informar o id na URL
                                 @PathVariable Long id) {
         var medico = repository.getReferenceById(id);
-        return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
+        return ResponseEntity.ok(new DTODetalhamentoMedico(medico));
     }
 
 }

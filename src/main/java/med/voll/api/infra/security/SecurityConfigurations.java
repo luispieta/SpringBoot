@@ -19,6 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 //Indica que vai personalizar as configurações de segurança
 @EnableWebSecurity
+//Serve para habilitar o recurso no projeto
+//@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfigurations {
     
     @Autowired
@@ -34,6 +36,9 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        //Deixa filtrado que só o usuário ADMIN pode acessar essas APIs
+                        //.requestMatchers(HttpMethod.DELETE, "/medicos").hasRole("ADMIN")
+                        //.requestMatchers(HttpMethod.DELETE, "/login").hasRole("ADMIN")
                         .anyRequest().authenticated()
                         .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 )

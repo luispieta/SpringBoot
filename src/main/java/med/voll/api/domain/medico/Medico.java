@@ -28,7 +28,7 @@ public class Medico {
 
     private Boolean ativo;
 
-    public Medico(DadosCadastroMedico dados) {
+    public Medico(DTOCadastroMedico dados) {
         this.ativo = true;
         this.nome = dados.nome();
         this.email = dados.email();
@@ -40,7 +40,7 @@ public class Medico {
     }
 
     //Construtor para realizar a alteração das informações do médico
-    public void atualizarInformacoes(DadosAtualizacaoMedico dados) {
+    public void atualizarInformacoes(DTOAtualizacaoMedico dados) {
         //IF para não deixar null os dados
         if (dados.nome() != null) {
             this.nome = dados.nome();

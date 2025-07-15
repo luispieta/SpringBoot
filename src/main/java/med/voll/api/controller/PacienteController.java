@@ -20,25 +20,25 @@ public class PacienteController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroPaciente dadosPaciente, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity cadastrar(@RequestBody @Valid DTOCadastroPaciente dadosPaciente, UriComponentsBuilder uriBuilder) {
         var paciente = new Paciente();
         repository.save(paciente);
 
         var uri = uriBuilder.path("/pacientes/{id}").buildAndExpand(paciente.getId()).toUri();
-        return ResponseEntity.created(uri).body(new DadosDetalhamentoPaciente(paciente));
+        return ResponseEntity.created(uri).body(new DTODetalhamentoPaciente(paciente));
     }
 
     @GetMapping
-    public Page<DadosListagemPaciente> listarPacientes(@PageableDefault(sort = {"nome"}) Pageable paginacao) {
-        return repository.findAll(paginacao).map(DadosListagemPaciente::new);
+    public Page<DTOListagemPaciente> listarPacientes(@PageableDefault(sort = {"nome"}) Pageable paginacao) {
+        return repository.findAll(paginacao).map(DTOListagemPaciente::new);
     }
 
     @PutMapping
     @Transactional
-    public ResponseEntity atualizacaoPacientes(@RequestBody @Valid DadosAtualizacaoPaciente dados) {
+    public ResponseEntity atualizacaoPacientes(@RequestBody @Valid DTOAtualizacaoPaciente dados) {
         var paciente = repository.getReferenceById(dados.id());
         paciente.atualizarInformacoes(dados);
-        return ResponseEntity.ok(new DadosDetalhamentoPaciente(paciente));
+        return ResponseEntity.ok(new DTODetalhamentoPaciente(paciente));
     }
 
     @DeleteMapping("/{id}")
@@ -53,7 +53,7 @@ public class PacienteController {
     @GetMapping("/{id}")
     public ResponseEntity detalharPacientes (@PathVariable Long id) {
         var pacientes = repository.getReferenceById(id);
-        return ResponseEntity.ok(new DadosDetalhamentoPaciente(pacientes));
+        return ResponseEntity.ok(new DTODetalhamentoPaciente(pacientes));
     }
 
 }

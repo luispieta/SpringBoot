@@ -2,10 +2,13 @@ package med.voll.api.infra.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 
 //Anotação que indica que a class irá tratar de erros
 @RestControllerAdvice
@@ -73,6 +76,11 @@ crm.obrigatorio=CRM é obrigatório
 crm.invalido=Formato do CRM é inválido
 especialidade.obrigatoria=Especialidade é obrigatória
 endereco.obrigatorio=Dados do endereço são obrigatórios
+
+Facilitando inserir novos idiomas
+ValidationMessages.properties           (padrão - pt)
+ValidationMessages_en.properties        (para inglês)
+ValidationMessages_es.properties        (para espanhol)
 
 
 E, nas anotações, indicar a chave das propriedades pelo próprio atributo message, delimitando com os caracteres { e }:
