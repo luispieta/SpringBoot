@@ -24,4 +24,9 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
             """)
     //Irá buscar só um médico, não será listado vários médicos
     Medico escolherMedicoAleatorioLivreNaData(Especialidade especialidade, @NotNull @Future LocalDateTime data);
+
+    @Query("""
+            SELECT m.ativo FROM medico m WHERE m.id = :id
+            """)
+    Boolean findAtivoById(Long idMedico);
 }
