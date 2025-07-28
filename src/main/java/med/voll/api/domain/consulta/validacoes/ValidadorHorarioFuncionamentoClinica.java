@@ -2,7 +2,6 @@ package med.voll.api.domain.consulta.validacoes;
 
 import med.voll.api.domain.ValidacaoException;
 import med.voll.api.domain.consulta.DTOAgendamentoConsulta;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
@@ -10,7 +9,6 @@ import java.time.DayOfWeek;
 @Component
 public class ValidadorHorarioFuncionamentoClinica implements ValidadorAgendamentoDeConsulta {
 
-    @Autowired
     public void validar(DTOAgendamentoConsulta dados) {
         var dataConsulta = dados.data();
 

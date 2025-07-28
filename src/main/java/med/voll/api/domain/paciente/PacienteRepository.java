@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 
     @Query("""
-            SELECT m.ativo FROM medico m WHERE m.id = :id
+            SELECT m.ativo FROM Paciente m WHERE m.id = :id
             """)
-    Boolean findAtivoById(Long idPaciente);
+    Boolean findAtivoById(Long id);
 
 }

@@ -16,7 +16,7 @@ public class ValidadorNaoAgendarNoMesmoDia implements ValidadorAgendamentoDeCons
 
         var horarioAbertura = dados.data().withHour(7);
         var horarioFechamento = dados.data().withHour(18);
-        var pacienteComOutraConsulta = repository.existyBypacienteIdAndDataBetween(dados.idPaciente(), horarioAbertura, horarioFechamento);
+        var pacienteComOutraConsulta = repository.existsByPacienteIdAndDataBetween(dados.idPaciente(), horarioAbertura, horarioFechamento);
         if(pacienteComOutraConsulta) {
             throw new ValidacaoException("Paciente já possui uma consulta agendada para esse dia");
         }

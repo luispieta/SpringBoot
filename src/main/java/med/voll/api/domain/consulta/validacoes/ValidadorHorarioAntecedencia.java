@@ -2,9 +2,7 @@ package med.voll.api.domain.consulta.validacoes;
 
 import med.voll.api.domain.ValidacaoException;
 import med.voll.api.domain.consulta.DTOAgendamentoConsulta;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -12,7 +10,6 @@ import java.time.LocalDateTime;
 @Component
 public class ValidadorHorarioAntecedencia implements ValidadorAgendamentoDeConsulta {
 
-    @Autowired
     public void validar(DTOAgendamentoConsulta dados) {
         var dataConsulta = dados.data();
         var agora = LocalDateTime.now();
