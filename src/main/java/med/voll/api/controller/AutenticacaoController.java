@@ -26,15 +26,18 @@ public class AutenticacaoController {
 
     //Será o metodo que irá realizar o login
     @PostMapping
-    public ResponseEntity efetuarLogin(@RequestBody @Valid DTOAutenticacao dados) {
-        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
-        //Não irá jogar o token no JSON, irá encapsular o token com descrição
-        var authentication = manager.authenticate(authenticationToken);
-        //Gera o token
-        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
-
-        return ResponseEntity.ok(new DTOTokenJWT(tokenJWT));
-
+    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
+        try {
+            var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
+            var authentication = manager.authenticate(authenticationToken);
+    
+            var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
+    
+            return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
