@@ -45,6 +45,18 @@ public class SecurityConfigurations {
                 .build();
     }
 
+    /*
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http.csrf(csrf -> csrf.disable())
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                //Deixa filtrado que só o usuário ADMIN pode acessar essas APIs
+                //.requestMatchers(HttpMethod.DELETE, "/medicos").hasRole("ADMIN")
+                //.requestMatchers(HttpMethod.DELETE, "/login").hasRole("ADMIN")
+                .build();
+    }
+    */
+
     @Bean
     //Esse metodo ira saber criar o objeto
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
