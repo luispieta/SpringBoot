@@ -14,31 +14,47 @@ import org.springframework.web.client.HttpStatusCodeException;
 @RestControllerAdvice
 public class TratadorDeErros {
 
-    //Toda vez que um controller e dar erro, irá ser chamado esse metodo
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity tratarErro404() {
-        //Irá retornar o HTTP Not Found (404)
         return ResponseEntity.notFound().build();
     }
 
-    //Toda vez que um controller e dar erro, irá ser chamado esse metodo
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity tratarErro400(MethodArgumentNotValidException ex) {
-        //Irá listar a mensagem de erros
         var erros = ex.getFieldErrors();
-        //Irá retornar o HTTP Bad Request (400)
-        return ResponseEntity.badRequest().body(erros.stream().map(DadosErroValidadecao::new).toList());
+        return ResponseEntity.badRequest().body(erros.stream().map(DadosErroValidacao::new).toList());
     }
 
-    //Serve para deixar mais específico e simplificado
-    private record DadosErroValidadecao(String campo, String mensagem) {
-        public DadosErroValidadecao(FieldError erro) {
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity tratarErro400(HttpMessageNotReadableException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity tratarErroBadCredentials() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity tratarErroAuthentication() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falha na autenticação");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity tratarErroAcessoNegado() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado");
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity tratarErro500(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " +ex.getLocalizedMessage());
+    }
+
+    private record DadosErroValidacao(String campo, String mensagem) {
+        public DadosErroValidacao(FieldError erro) {
             this(erro.getField(), erro.getDefaultMessage());
-
         }
-
     }
-
 }
 
 /*
