@@ -28,7 +28,7 @@ public class AgendaDeConsultas {
     private List<ValidadorAgendamentoDeConsulta> validadores;
 
     //A classe Service executa as regras de negócio e validação da aplicação
-    public void agendar(DTOAgendamentoConsulta dados) {
+    public DTODetalhamentoConsulta agendar(DTOAgendamentoConsulta dados) {
         //O existsById() é um metodo boolean para dizer se tem o ID ou não
         if(!repositoryPaciente.existsById(dados.idPaciente())) {
             throw new ValidacaoException("ID do paciente informado não existe");
@@ -45,9 +45,16 @@ public class AgendaDeConsultas {
 
         var medico = escolherMedico(dados);
 
+        if(medico == null) {
+            throw new ValidacaoException("Não existe médico disponível nessa data");
+
+        }
+
         var paciente = repositoryPaciente.getReferenceById(dados.idPaciente());
         var consulta = new Consulta(null, medico, paciente, dados.data(), null);
         repositoryConsulta.save(consulta);
+
+        return new DTODetalhamentoConsulta(consulta);
 
     }
 

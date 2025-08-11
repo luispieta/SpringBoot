@@ -26,14 +26,14 @@ public class AutenticacaoController {
 
     //Será o metodo que irá realizar o login
     @PostMapping
-    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
+    public ResponseEntity efetuarLogin(@RequestBody @Valid DTOAutenticacao dados) {
         try {
             var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
             var authentication = manager.authenticate(authenticationToken);
     
             var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
     
-            return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
+            return ResponseEntity.ok(new DTOTokenJWT(tokenJWT));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
