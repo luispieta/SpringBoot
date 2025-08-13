@@ -7,6 +7,5 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
 
     boolean existsByPacienteIdAndDataBetween(Long idPaciente, LocalDateTime horarioAbertura, LocalDateTime horarioFechamento);
 
-    boolean existsByMedicoIdAndData(Long idMedico, LocalDateTime data);
-
+    boolean existsByMedicoIdAndDataAndMotivoCancelamentoIsNull(Long idMedico, LocalDateTime data);
 }

@@ -1,7 +1,8 @@
 package med.voll.api.domain.consulta;
 
 import med.voll.api.domain.ValidacaoException;
-import med.voll.api.domain.consulta.validacoes.ValidadorAgendamentoDeConsulta;
+import med.voll.api.domain.consulta.validacoes.agendamento.ValidadorAgendamentoDeConsulta;
+import med.voll.api.domain.consulta.validacoes.cancelamento.ValidadorCancelamentoDeConsulta;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
 import med.voll.api.domain.paciente.PacienteRepository;
@@ -22,6 +23,9 @@ public class AgendaDeConsultas {
 
     @Autowired
     private PacienteRepository repositoryPaciente;
+
+    @Autowired
+    private List<ValidadorCancelamentoDeConsulta> validadoresCancelamento;
 
     @Autowired
     //O Spring vai procurar todas as classes que implementam essa inferface, injetando um por um nesse atributo
@@ -72,12 +76,13 @@ public class AgendaDeConsultas {
     }
 
     public void cancelar(DTOCancelamentoConsulta dados) {
-        if(!repositoryConsulta.existsById(dados.idConsulta())) {
-            throw new ValidacaoException("ID da consulta informado não existe");
-
+        if (!repositoryConsulta.existsById(dados.idConsulta())) {
+            throw new ValidacaoException("Id da consulta informado não existe!");
         }
+
+        validadoresCancelamento.forEach(v -> v.validar(dados));
+
         var consulta = repositoryConsulta.getReferenceById(dados.idConsulta());
         consulta.cancelar(dados.motivo());
-
     }
 }

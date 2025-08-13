@@ -1,4 +1,4 @@
-package med.voll.api.domain.consulta.validacoes;
+package med.voll.api.domain.consulta.validacoes.agendamento;
 
 import med.voll.api.domain.ValidacaoException;
 import med.voll.api.domain.consulta.DTOAgendamentoConsulta;
@@ -7,7 +7,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 //Fala para o Spring que é uma classe genérica
-@Component
+@Component("ValidadorHorarioAntecedenciaAgendamento")
 public class ValidadorHorarioAntecedencia implements ValidadorAgendamentoDeConsulta {
 
     public void validar(DTOAgendamentoConsulta dados) {
