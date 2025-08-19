@@ -1,5 +1,6 @@
 package med.voll.api.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import med.voll.api.domain.medico.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@RestController             //Indica que a classe é um controller REST, com os métodos retornando dados (JSON por padrão).
-@RequestMapping("medicos")  //Todos os endpoints dessa classe começarão com /medicos.
+@RestController                             //Indica que a classe é um controller REST, com os métodos retornando dados (JSON por padrão).
+@RequestMapping("medicos")                  //Todos os endpoints dessa classe começarão com /medicos.
+@SecurityRequirement(name = "bearer-key")   //Todos o métodos são restritos
 public class MedicoController {
 
     @Autowired //Injeta automaticamente a dependência de MedicoRepository, que é um repositório Spring Data JPA para acessar o banco de dados.

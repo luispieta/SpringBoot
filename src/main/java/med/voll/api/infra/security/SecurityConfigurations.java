@@ -36,6 +36,8 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        //Irá permitir a entrada publica dessas 3 http
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         //Deixa filtrado que só o usuário ADMIN pode acessar essas APIs
                         //.requestMatchers(HttpMethod.DELETE, "/medicos").hasRole("ADMIN")
                         //.requestMatchers(HttpMethod.DELETE, "/login").hasRole("ADMIN")
