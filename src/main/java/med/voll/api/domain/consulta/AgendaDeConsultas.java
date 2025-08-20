@@ -55,7 +55,7 @@ public class AgendaDeConsultas {
         }
 
         var paciente = repositoryPaciente.getReferenceById(dados.idPaciente());
-        var consulta = new Consulta(null, medico, paciente, dados.data(), null);
+        var consulta = new Consulta(null, medico, paciente, dados.data());
         repositoryConsulta.save(consulta);
 
         return new DTODetalhamentoConsulta(consulta);
