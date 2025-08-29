@@ -11,14 +11,11 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
-
 import static org.assertj.core.api.Assertions.assertThat;
-
 
 @DataJpaTest                                                                    //É utilizada para testar uma interface Repository
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)    //Serve para não substítuir as configurações do banco de dados, não sendo em memória
@@ -54,7 +51,7 @@ class MedicoRepositoryTest {
     }
 
     @Test
-    @DisplayName("Deveria devolver médico quando ele deveria estiver disponível na data")
+    @DisplayName("Deveria devolver médico quando ele estiver disponível na data")
     void escolherMedicoAleatorioLivreNaDataCenario2() {
 
         //given ou arrange (DADO)
@@ -64,8 +61,6 @@ class MedicoRepositoryTest {
 
         //when ou act (QUANDO)
         var medico = cadastrarMedico("Medico", "medico@gmail.com", "666666", Especialidade.CARDIOLOGIA);
-
-        //when ou act (QUANDO)
         var medicoLivre = medicoRepository.escolherMedicoAleatorioLivreNaData(Especialidade.CARDIOLOGIA, proximaSegundaAs10);
 
         //then ou assert (ENTÃO)
@@ -73,8 +68,34 @@ class MedicoRepositoryTest {
     }
 
     @Test
+    @DisplayName("Deveria devolver médico quando ele deveria estiver disponível na data")
+    void escolherMedicoAleatorioLivreNaDataCenario3() {
+
+        //given ou arrange (DADO)
+        var proximaSegundaAs10 = LocalDate.now()
+                .with(TemporalAdjusters.next(DayOfWeek.MONDAY))
+                .atTime(10, 0);
+
+        //when ou act (QUANDO)
+        var medico = cadastrarMedico("Medico", "medico@gmail.com", "666666", Especialidade.CARDIOLOGIA);
+        var medicoLivre = medicoRepository.escolherMedicoAleatorioLivreNaData(Especialidade.CARDIOLOGIA, proximaSegundaAs10);
+
+        //then ou assert (ENTÃO)
+        assertThat(medicoLivre).isEqualTo(medico);
+    }
+
+    @Test
+    @DisplayName("Deveria devolver o Medico, pois está ativo")
     void findAtivoById() {
 
+        //given ou arrange (DADO)
+        var medico = cadastrarMedico("Medico", "medico@gmail.com", "666666", Especialidade.CARDIOLOGIA);
+
+        //when ou act (QUANDO)
+        var ativo = medico.getAtivo();
+
+        //then ou assert (ENTÃO)
+        assertThat(ativo).isTrue();
     }
 
     //Será utilizado para reutilizar os dados
