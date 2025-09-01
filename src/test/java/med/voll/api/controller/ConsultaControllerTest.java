@@ -45,7 +45,7 @@ class ConsultaControllerTest {
 
     // Simula que o usuário está logado
     @WithMockUser
-    void agendarCenario1() throws Exception {
+    void testeNoControllerConsultaParaHttp400() throws Exception {
 
         var response = mvc.perform(post("/consultas"))
                 .andReturn().getResponse();
@@ -59,7 +59,7 @@ class ConsultaControllerTest {
 
     // Simula que o usuário está logado
     @WithMockUser
-    void agendarCenario2() throws Exception {
+    void testeNoControllerConsultaParaHttp200() throws Exception {
 
         var data = LocalDateTime.now().plusHours(1);
         var especialidade = Especialidade.CARDIOLOGIA;

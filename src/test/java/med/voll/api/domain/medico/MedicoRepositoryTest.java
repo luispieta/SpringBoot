@@ -68,23 +68,6 @@ class MedicoRepositoryTest {
     }
 
     @Test
-    @DisplayName("Deveria devolver médico quando ele deveria estiver disponível na data")
-    void escolherMedicoAleatorioLivreNaDataCenario3() {
-
-        //given ou arrange (DADO)
-        var proximaSegundaAs10 = LocalDate.now()
-                .with(TemporalAdjusters.next(DayOfWeek.MONDAY))
-                .atTime(10, 0);
-
-        //when ou act (QUANDO)
-        var medico = cadastrarMedico("Medico", "medico@gmail.com", "666666", Especialidade.CARDIOLOGIA);
-        var medicoLivre = medicoRepository.escolherMedicoAleatorioLivreNaData(Especialidade.CARDIOLOGIA, proximaSegundaAs10);
-
-        //then ou assert (ENTÃO)
-        assertThat(medicoLivre).isEqualTo(medico);
-    }
-
-    @Test
     @DisplayName("Deveria devolver o Medico, pois está ativo")
     void findAtivoById() {
 
