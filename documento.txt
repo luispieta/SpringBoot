@@ -1,0 +1,12 @@
+Utilizado para realizar o deploy, isso foi só demonstração pois na plataforma tem que seguir os passos dado.
+
+java -Dspring.profiles.active=prod -DDATASOURCE_URL=jdbc:mysql://localhost/vollmed_api -DDATASOURCE_USERNAME=root -DDATASOURCE_PASSWORD=root -jar target/api-0.0.1-SNAPSHOT.jar
+
+Para realizar o deploy precisa estar configurado um application-prod.properties:
+
+spring.datasource.url=${DATASORUCE_URL}
+spring.datasource.username=${DATASORUCE_USERNAME}
+spring.datasource.password=${DATASORUCE_PASSWORD}
+
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.format_sql=false
