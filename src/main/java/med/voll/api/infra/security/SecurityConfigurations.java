@@ -26,6 +26,7 @@ public class SecurityConfigurations {
     @Autowired
     private SecurityFilter securityFilter;
 
+    /*
     //Serve para exportar uma classe para o Spring, podendo ser injetado depois
     @Bean
     //Serve para a autenticação e para autorização
@@ -46,8 +47,8 @@ public class SecurityConfigurations {
                 )
                 .build();
     }
+ */
 
-    /*
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
@@ -57,7 +58,7 @@ public class SecurityConfigurations {
                 //.requestMatchers(HttpMethod.DELETE, "/login").hasRole("ADMIN")
                 .build();
     }
-    */
+
 
     @Bean
     //Esse metodo ira saber criar o objeto

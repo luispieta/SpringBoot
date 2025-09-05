@@ -30,7 +30,8 @@ public class SecurityFilter extends OncePerRequestFilter {
             //Recupera o Token, se não vêm ele segue o fluxo
             var subject = tokenService.getSubject(tokenJWT);
             //Precisa chamar o usuário que vêm do banco
-            var usuario = repository.findByLogin(subject);
+            var usuario = repository.findByLogin(subject)
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado no token: " + subject));
             //Realiza a autenticação do usuário, criando o DTO
             var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
 
